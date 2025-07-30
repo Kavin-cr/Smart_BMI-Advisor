@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart BMI Advisor</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7f8;
+      color: #333;
+      text-align: center;
+    }
+    .container {
+      padding: 2rem;
+      max-width: 600px;
+      margin: auto;
+    }
+    .title {
+      font-size: 2rem;
+      margin-bottom: 0.3rem;
+    }
+    .subtitle {
+      color: #555;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+    .form-group {
+      margin: 1rem 0;
+      text-align: left;
+    }
+    label {
+      font-weight: 500;
+    }
+    input {
+      width: 100%;
+      padding: 0.8rem;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 0.8rem 2rem;
+      font-size: 1rem;
+      margin-top: 1.5rem;
+      border: none;
+      background: #0077cc;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+    button:hover {
+      background: #005fa3;
+    }
+    .bmi-box {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      font-weight: bold;
+    }
+    .advice-box {
+      text-align: left;
+      font-size: 1rem;
+      line-height: 1.6;
+      background: #fff;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-top: 1rem;
+      white-space: pre-wrap;
+    }
+    .back-button {
+      margin-top: 2rem;
+      background-color: #e63946;
+    }
+    footer {
+      margin-top: 3rem;
+      font-size: 0.8rem;
+      color: #777;
+    }
+    .hidden {
+      display: none;
+    }
+    .fade-in {
+      animation: fadeIn 1s ease forwards;
+    }
+    @keyframes fadeIn {
+      0% {opacity: 0; transform: translateY(10px);}
+      100% {opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Page 1 -->
+    <div id="inputPage">
+      <h1 class="title">Smart BMI Advisor</h1>
+      <p class="subtitle">Designed & Developed by Kavin & Vamanan</p>
+
+      <div class="form-group">
+        <label for="age">Age</label>
+        <input type="number" id="age" placeholder="Enter your age" required />
+      </div>
+      <div class="form-group">
+        <label for="height">Height (cm)</label>
+        <input type="number" id="height" placeholder="Enter height in cm" required />
+      </div>
+      <div class="form-group">
+        <label for="weight">Weight (kg)</label>
+        <input type="number" id="weight" placeholder="Enter weight in kg" required />
+      </div>
+      <button onclick="calculateAndShow()">Calculate BMI</button>
+    </div>
+
+    <!-- Page 2 -->
+    <div id="resultPage" class="hidden fade-in">
+      <h1 class="title">Your BMI Result</h1>
+      <div id="bmiResult" class="bmi-box"></div>
+      <div id="advice" class="advice-box"></div>
+      <button class="back-button" onclick="goBack()">← Back</button>
+    </div>
+  </div>
+
+  <footer>© 2025 Kavin & Vamanan</footer>
+
+  <script>
+    function calculateAndShow() {
+      const age = document.getElementById("age").value;
+      const height = document.getElementById("height").value;
+      const weight = document.getElementById("weight").value;
+
+      if (!age || !height || !weight) {
+        alert("Please fill all the fields.");
+        return;
+      }
+
+      const heightInMeters = height / 100;
+      const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(1);
+
+      showResultPage(bmi);
+    }
+
+    function showResultPage(bmi) {
+      document.getElementById("inputPage").classList.add("hidden");
+      document.getElementById("resultPage").classList.remove("hidden");
+      document.getElementById("bmiResult").innerText = `Your BMI is: ${bmi}`;
+
+      const adviceBox = document.getElementById("advice");
+      let advice = "";
+
+      if (bmi < 10) {
+        advice = `🚨 Life-threatening malnutrition
+🧠 Organs, brain, and heart at serious risk
+
+💪🏻 Immediate Actions
+🏥 Seek emergency medical care
+📞 Tell a trusted person (family/friend/doctor)
+🧑‍⚕️ Get evaluated by a medical + mental health team
+
+💪🏻 Do NOT
+❌ Attempt to manage it alone
+❌ Delay care or ignore symptoms (fainting, confusion, irregular heartbeat)
+
+💪🏻 Potential Causes
+🥀 Severe eating disorder (e.g., anorexia nervosa)
+🦠 Chronic illness or malabsorption
+😔 Trauma or extreme stress
+
+💪🏻 You Deserve Help
+🤝 Recovery is possible with the right support
+🛌 Inpatient treatment may be necessary
+
+💪🏻 Nutritional Rehabilitation Is Medically Supervised
+Requires careful refeeding to avoid Refeeding Syndrome (a dangerous shift in electrolytes)
+Gradual weight restoration is managed by professionals
+
+💪🏻 Mental Health Support Is Crucial
+Therapy (CBT, DBT, or family-based) is essential for long-term recovery
+
+💪🏻 Social & Emotional Reconnection Helps Healing
+Isolation worsens the condition — rebuilding relationships and support systems is part of recovery`;
+      } else if (bmi < 15) {
+        advice = `⚠️ High risk of organ stress, heart issues, and immune weakness
+🧠 Mental clarity, mood, and hormonal function often severely affected
+🥶 Common symptoms: dizziness, fatigue, cold, irregular periods
+
+💪🏻 Immediate Actions
+🩺 Get full medical evaluation (labs, ECG, vitals)
+🥗 Begin monitored nutritional rehabilitation
+💬 Start therapy focused on root causes
+
+💪🏻 Do NOT
+❌ Self-prescribe intense exercise or diets
+❌ Rely on calorie calculators or “quick fixes”
+❌ Minimize seriousness
+
+💪🏻 Additional Key Points
+💡 Recovery Requires Medical + Psychological Support
+🧍‍♀️ Social Support Matters
+🛡️ Body Needs Time to Heal Internally`;
+      } else if (bmi < 18.5) {
+        advice = `📉 Energy levels, immunity, and hormone balance often still impaired
+❄️ Common signs: fatigue, cold, slow healing
+
+💪🏻 Recommended Actions
+🩺 Check-up: blood work, vitals, nutrition screening
+🍽️ Gradual, consistent nutritional support
+💬 Address underlying causes
+
+💪🏻 Do NOT
+❌ Ignore symptoms
+❌ Use restrictive diets or over-exercise
+❌ Compare yourself to others
+
+💪🏻 Additional Key Points
+⚖️ Weight gain may still be necessary
+🧠 Therapy helps mental recovery
+🧍‍♀️ Prevent relapse or further loss`;
+      } else if (bmi < 25) {
+        advice = `✅ Supports immune, hormonal, and organ function
+🧠 Linked to better energy, focus, emotional regulation
+
+💪🏻 Recommended Actions
+🍽️ Balanced, nutrient-rich diet
+🏃‍♂️ Stay active and enjoy movement
+💬 Monitor mental and emotional health
+
+💪🏻 Do NOT
+❌ Use BMI as the only health measure
+❌ Over-focus on the number
+
+💪🏻 Additional Key Points
+🔍 Look beyond the scale: strength, mood, digestion, sleep
+🧠 Mental wellness still matters
+🏗️ Build sustainable lifestyle habits`;
+      } else if (bmi <= 30) {
+        advice = `⚠️ May raise risk for metabolic conditions
+🧠 Some in this range are still metabolically healthy
+
+💪🏻 Recommended Actions
+🍽️ Prioritize balanced nutrition
+🏋️‍♀️ Add strength + cardio
+🩺 Monitor blood pressure, cholesterol, etc.
+
+💪🏻 Do NOT
+❌ Obsess over BMI
+❌ Use crash diets
+❌ Focus only on scale
+
+💪🏻 Additional Key Points
+🫀 Behavior > weight for health
+🧠 Body image matters
+🧬 Muscle + genetics influence BMI`;
+      } else if (bmi <= 40) {
+        advice = `⚠️ Increased risk for:
+Type 2 diabetes, BP, cholesterol, joint stress
+
+💪🏻 Recommended Actions
+🩺 Health screening: lipids, sugar, liver, thyroid
+🍽️ Nutrient-dense meals
+🏃‍♂️ Enjoyable consistent movement
+
+💪🏻 Do NOT
+❌ Use extreme diets
+❌ Let shame drive decisions
+
+💪🏻 Additional Key Points
+📉 Small changes = big results
+🧠 Therapy helps emotional eating/body image
+🧬 Personalize your plan`;
+      } else {
+        advice = `🚨 High risk for:
+Type 2 diabetes, heart disease, sleep apnea, joint issues
+
+💪🏻 Recommended Actions
+🏥 Work with doctors, dietitians, therapists
+📋 Monitor: BP, sugar, liver, sleep, mobility
+🍽️ Sustainable nutrition, gentle activity
+
+💪🏻 Do NOT
+❌ Fall for diet scams
+❌ Let stigma prevent care
+
+💪🏻 Additional Key Points
+🧑‍⚕️ Bariatric care is valid
+🧠 Trauma, binge eating, depression matter
+🏃‍♂️ Small changes = big health gains`;
+      }
+
+      adviceBox.innerText = advice;
+    }
+
+    function goBack() {
+      document.getElementById("age").value = "";
+      document.getElementById("height").value = "";
+      document.getElementById("weight").value = "";
+      document.getElementById("resultPage").classList.add("hidden");
+      document.getElementById("inputPage").classList.remove("hidden");
+    }
+  </script>
+</body>
+</html>
